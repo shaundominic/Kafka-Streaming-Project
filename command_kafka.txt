@@ -1,0 +1,28 @@
+# Java Setup
+wget https://downloads.apache.org/kafka/3.3.1/kafka_2.12-3.3.1.tgz
+tar -xvf kafka_2.12-3.3.1.tgz
+sudo yum intall java-1.8.0-openjdk
+cd kafka_2.12-3.3.1
+
+# Starting Zookeeper
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+# Staring Kafka-server
+# Allocating more memory for Kafka server
+export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"
+cd kafka_2.12-3.3.1
+bin/kafka-server-start.sh config/server.properties
+
+# Changing the server.properties to run with the public IP
+"sudo vi config/server.properties" - Change ADVERTISED_LISTENER to public ip of the instance
+
+# Creating topic
+cd kafka_2.12-3.3.1
+bin/kafka-topics.sh --create --topic demo_test --bootstrap-server 65.2.168.105:9092 --replication-factor 1 --partition 1
+
+# Start the producer
+bin/kakfa-console-producer.sh --topic demo --bootstrap-server 65.2.168.105:9092
+
+# Start the consumer
+cd kafka_2.12-3.3.1
+bin/kafka-console-consumer.sh --topic demo --bootstrap-server 65.2.168.105:9092
